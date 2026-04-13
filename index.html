@@ -539,7 +539,7 @@ function drawDonut(containerId, year){
   var wrap = document.getElementById(containerId);
   wrap.innerHTML='';
   var mob=isMobile();
-  var W=mob?320:520, H=mob?540:360, CX=mob?160:260, CY=mob?160:180, R=mob?120:140, r=mob?66:78;
+  var W=mob?320:520, H=mob?370:360, CX=mob?160:140, CY=mob?130:180, R=mob?110:140, r=mob?60:78;
   var activeBanks = BANKS.filter(function(b){ return vis[b]; });
   var data = activeBanks.map(function(b){ return {bank:b,val:DEC[year]?DEC[year][b]||0:0}; });
   var total = data.reduce(function(s,d){ return s+d.val; },0)||1;
@@ -573,17 +573,29 @@ function drawDonut(containerId, year){
   t2.textContent='Total: '+fmtK(total-0);
 
   /* legend */
-  var lx=mob?10:310, ly=mob?280:20, lh=mob?28:22;
-  var visIdx=0;
-  data.forEach(function(d,i){
-    if(!d.val) return;
-    var pct=(d.val/total*100).toFixed(1);
-    var iy=mob?visIdx:i;
-    el('rect',{x:lx,y:ly+iy*lh,width:12,height:12,fill:C[d.bank],rx:'3'},svg);
-    var lt=el('text',{x:lx+18,y:ly+iy*lh+10,'font-family':'Inter, system-ui, sans-serif','font-size':mob?'13':'12','fill':'#2C3E50','font-weight':'500'},svg);
-    lt.textContent=d.bank+': '+fmtK(d.val)+' ('+pct+'%)';
-    visIdx++;
-  });
+  if(mob){
+    var cols=2, colW=155, lh=18, lx=5, ly=290;
+    var visIdx=0;
+    data.forEach(function(d){
+      if(!d.val) return;
+      var pct=(d.val/total*100).toFixed(1);
+      var col=visIdx%cols, row=Math.floor(visIdx/cols);
+      var cx=lx+col*colW, cy=ly+row*lh;
+      el('rect',{x:cx,y:cy,width:8,height:8,fill:C[d.bank],rx:'2'},svg);
+      var lt=el('text',{x:cx+12,y:cy+8,'font-family':'Inter, system-ui, sans-serif','font-size':'10','fill':'#2C3E50','font-weight':'500'},svg);
+      lt.textContent=d.bank+': '+fmtK(d.val)+' ('+pct+'%)';
+      visIdx++;
+    });
+  } else {
+    var lx=310, ly=20, lh=20;
+    data.forEach(function(d,i){
+      if(!d.val) return;
+      var pct=(d.val/total*100).toFixed(1);
+      el('rect',{x:lx,y:ly+i*lh,width:10,height:10,fill:C[d.bank],rx:'2'},svg);
+      var lt=el('text',{x:lx+16,y:ly+i*lh+9,'font-family':'Inter, system-ui, sans-serif','font-size':'11','fill':'#2C3E50','font-weight':'500'},svg);
+      lt.textContent=d.bank+': '+fmtK(d.val)+' ('+pct+'%)';
+    });
+  }
 }
 
 /* ═══ SVG BAR CHART ═══ */
