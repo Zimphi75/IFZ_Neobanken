@@ -236,7 +236,7 @@ input[type=range]::-moz-range-thumb { width: 20px; height: 20px; border-radius: 
     <div class="sticky-ctrl active" data-ctrl="zeitverlauf">
       <div class="controls">
         <div class="control-group">
-          <div class="control-label">Zeitraum wählen ← ziehen</div>
+          <div class="control-label">Zeitraum wählen</div>
           <div class="dual-slider">
             <span class="slider-val" id="valZeitStart">2020</span>
             <div class="dual-slider-track">
@@ -252,7 +252,7 @@ input[type=range]::-moz-range-thumb { width: 20px; height: 20px; border-radius: 
     <div class="sticky-ctrl" data-ctrl="marktanteile">
       <div class="controls">
         <div class="control-group">
-          <div class="control-label">Referenzjahr ← ziehen</div>
+          <div class="control-label">Referenzjahr</div>
           <div class="slider-wrap">
             <input type="range" id="sliderMarkt" min="2021" max="2026" value="2025" step="1">
             <span class="slider-val" id="valMarkt">2025</span>
@@ -263,10 +263,10 @@ input[type=range]::-moz-range-thumb { width: 20px; height: 20px; border-radius: 
     <div class="sticky-ctrl" data-ctrl="wachstum">
       <div class="controls">
         <div class="control-group">
-          <div class="control-label">Bis Jahr ← ziehen</div>
+          <div class="control-label">Ab Jahr</div>
           <div class="slider-wrap">
-            <input type="range" id="sliderWachstum" min="2022" max="2026" value="2025" step="1">
-            <span class="slider-val" id="valWachstum">2025</span>
+            <input type="range" id="sliderWachstum" min="2021" max="2026" value="2021" step="1">
+            <span class="slider-val" id="valWachstum">2021</span>
           </div>
         </div>
       </div>
@@ -274,7 +274,7 @@ input[type=range]::-moz-range-thumb { width: 20px; height: 20px; border-radius: 
     <div class="sticky-ctrl" data-ctrl="ereignisse">
       <div class="controls">
         <div class="control-group">
-          <div class="control-label">Zeitraum ab ← ziehen</div>
+          <div class="control-label">Zeitraum ab</div>
           <div class="slider-wrap">
             <input type="range" id="sliderEreignisse" min="2020" max="2026" value="2020" step="1">
             <span class="slider-val" id="valEreignisse">2020</span>
@@ -443,7 +443,7 @@ function drawLine(containerId, startYear, endYear){
   var wrap = document.getElementById(containerId);
   wrap.innerHTML = '';
   var mob=isMobile();
-  var W=mob?400:800, H=mob?500:400, PL=mob?44:58, PR=mob?12:18, PT=20, PB=mob?38:44;
+  var W=mob?400:800, H=mob?500:400, PL=mob?44:58, PR=mob?12:18, PT=20, PB=mob?48:52;
   var iW=W-PL-PR, iH=H-PT-PB;
 
   /* filter rows */
@@ -476,13 +476,29 @@ function drawLine(containerId, startYear, endYear){
     el('text',{x:PL-6,y:gy+4,'text-anchor':'end','font-size':'10','fill':'#8a9ab0'},svg).textContent=fmtK(lv);
   }
 
-  /* x labels — quarterly ticks */
+  /* x labels */
+  var MNAMES=['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
+  var span=endYear-startYear;
+  var lastYr='';
   rows.forEach(function(r,i){
-    var mo=r[0].slice(5);
-    if(mo==='01'||mo==='04'||mo==='07'||mo==='10'){
+    var yr=r[0].slice(0,4), mo=r[0].slice(5);
+    var moIdx=parseInt(mo)-1;
+    var isNewYear = (yr!==lastYr);
+    if(isNewYear) lastYr=yr;
+    /* show year start always; for spans <= 3 years show every quarter too */
+    var isQuarter = (mo==='01'||mo==='04'||mo==='07'||mo==='10');
+    var showLabel = isNewYear || (span<=3 && isQuarter);
+    if(showLabel){
       var lx=xPos(i);
       el('line',{x1:lx,y1:PT,x2:lx,y2:PT+iH,stroke:'#f0f2f5','stroke-width':'1'},svg);
-      el('text',{x:lx,y:H-10,'text-anchor':'middle','font-size':'9','fill':'#8a9ab0'},svg).textContent=r[0].slice(2,7);
+      if(isNewYear){
+        /* Year start: show month + full year, bold */
+        var t=el('text',{x:lx,y:H-PB+16,'text-anchor':'middle','font-size':mob?'10':'11','fill':'#2C3E50','font-weight':'600'},svg);
+        t.textContent=MNAMES[moIdx]+' '+yr;
+      } else {
+        /* Quarter ticks: show month name */
+        el('text',{x:lx,y:H-PB+16,'text-anchor':'middle','font-size':mob?'9':'10','fill':'#8a9ab0'},svg).textContent=MNAMES[moIdx];
+      }
     }
   });
 
@@ -619,11 +635,11 @@ function drawDonut(containerId, year){
 }
 
 /* ═══ SVG BAR CHART ═══ */
-function drawBar(containerId, endYear){
+function drawBar(containerId, startYear){
   var wrap = document.getElementById(containerId);
   wrap.innerHTML='';
   var years=[];
-  for(var y=2021;y<=endYear;y++) years.push(y);
+  for(var y=startYear;y<=2026;y++) years.push(y);
   var activeBanks = BANKS.filter(function(b){ return vis[b]; });
 
   var mob=isMobile();
@@ -744,9 +760,9 @@ function redrawMarkt(){
   drawDonut('wrapMarkt',yr);
 }
 function redrawWachstum(){
-  var e=parseInt(document.getElementById('sliderWachstum').value);
-  document.getElementById('valWachstum').textContent=e;
-  drawBar('wrapWachstum',e);
+  var s=parseInt(document.getElementById('sliderWachstum').value);
+  document.getElementById('valWachstum').textContent=s;
+  drawBar('wrapWachstum',s);
 }
 
 /* ═══ TABS ═══ */
