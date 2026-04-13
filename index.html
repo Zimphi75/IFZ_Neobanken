@@ -394,6 +394,7 @@ function el(tag,attrs,parent){
   if(parent) parent.appendChild(e);
   return e;
 }
+function isMobile(){ return window.innerWidth<=600; }
 
 /* ═══ TOOLTIP ═══ */
 var tip = document.getElementById('tooltip');
@@ -414,7 +415,8 @@ function hideTip(){ tip.style.opacity='0'; }
 function drawLine(containerId, startYear, endYear){
   var wrap = document.getElementById(containerId);
   wrap.innerHTML = '';
-  var W=800, H=320, PL=58, PR=18, PT=20, PB=44;
+  var mob=isMobile();
+  var W=mob?400:800, H=mob?380:320, PL=mob?44:58, PR=mob?12:18, PT=20, PB=mob?38:44;
   var iW=W-PL-PR, iH=H-PT-PB;
 
   /* filter rows */
@@ -529,7 +531,8 @@ function drawLine(containerId, startYear, endYear){
 function drawDonut(containerId, year){
   var wrap = document.getElementById(containerId);
   wrap.innerHTML='';
-  var W=520, H=300, CX=170, CY=150, R=110, r=62;
+  var mob=isMobile();
+  var W=mob?320:520, H=mob?480:300, CX=mob?160:170, CY=mob?130:150, R=mob?100:110, r=mob?55:62;
   var activeBanks = BANKS.filter(function(b){ return vis[b]; });
   var data = activeBanks.map(function(b){ return {bank:b,val:DEC[year]?DEC[year][b]||0:0}; });
   var total = data.reduce(function(s,d){ return s+d.val; },0)||1;
@@ -562,14 +565,17 @@ function drawDonut(containerId, year){
   var t2=el('text',{x:CX,y:CY+10,'text-anchor':'middle','font-size':'10','fill':'#5a6a7a'},svg);
   t2.textContent='Total: '+fmtK(total-0);
 
-  /* legend right side */
-  var lx=310, ly=20, lh=22;
+  /* legend */
+  var lx=mob?10:310, ly=mob?280:20, lh=mob?28:22;
+  var visIdx=0;
   data.forEach(function(d,i){
     if(!d.val) return;
     var pct=(d.val/total*100).toFixed(1);
-    el('rect',{x:lx,y:ly+i*lh,width:12,height:12,fill:C[d.bank],rx:'3'},svg);
-    var lt=el('text',{x:lx+18,y:ly+i*lh+10,'font-family':'Inter, system-ui, sans-serif','font-size':'12','fill':'#2C3E50','font-weight':'500'},svg);
+    var iy=mob?visIdx:i;
+    el('rect',{x:lx,y:ly+iy*lh,width:12,height:12,fill:C[d.bank],rx:'3'},svg);
+    var lt=el('text',{x:lx+18,y:ly+iy*lh+10,'font-family':'Inter, system-ui, sans-serif','font-size':mob?'13':'12','fill':'#2C3E50','font-weight':'500'},svg);
     lt.textContent=d.bank+': '+fmtK(d.val)+' ('+pct+'%)';
+    visIdx++;
   });
 }
 
@@ -581,7 +587,8 @@ function drawBar(containerId, endYear){
   for(var y=2021;y<=endYear;y++) years.push(y);
   var activeBanks = BANKS.filter(function(b){ return vis[b]; });
 
-  var W=800, H=320, PL=58, PR=18, PT=20, PB=44;
+  var mob=isMobile();
+  var W=mob?400:800, H=mob?380:320, PL=mob?44:58, PR=mob?12:18, PT=20, PB=mob?38:44;
   var iW=W-PL-PR, iH=H-PT-PB;
 
   /* compute data */
