@@ -71,15 +71,15 @@ body {
 .kpi-accent { color: var(--accent); }
 
 /* TABS */
-.tabs-bar { display: flex; padding: 0 16px; border-bottom: 1px solid var(--border); overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; touch-action: pan-x; background: var(--soft); }
+.tabs-label { font-size: 11px; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); font-weight: 500; padding: 12px 24px 0; }
+.tabs-bar { display: flex; padding: 8px 16px 12px; gap: 8px; border-bottom: 1px solid var(--border); overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; touch-action: pan-x; background: var(--soft); }
 .tabs-bar::-webkit-scrollbar { display: none; }
-.tab-btn { font-family: 'Inter', system-ui, sans-serif; font-size: 14px; font-weight: 500; padding: 16px 20px 14px; background: none; border: none; border-bottom: 2px solid transparent; margin-bottom: -1px; cursor: pointer; color: var(--muted); white-space: nowrap; min-height: 48px; display: flex; align-items: center; gap: 8px; -webkit-tap-highlight-color: transparent; flex-shrink: 0; transition: all 0.3s ease; position: relative; }
-.tab-btn svg { width: 16px; height: 16px; flex-shrink: 0; transition: all 0.3s ease; }
-.tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); background: var(--bg); box-shadow: 0 -2px 8px rgba(62, 90, 138, 0.1); }
-.tab-btn:hover:not(.active) { color: var(--text); background: rgba(255,255,255,0.9); transform: translateY(-1px); box-shadow: 0 2px 8px rgba(0,0,0,.08); }
-.tab-btn:hover:not(.active) svg { transform: scale(1.1); }
-.tab-btn::after { content: ''; position: absolute; bottom: -1px; left: 50%; width: 0; height: 2px; background: var(--accent); transition: all 0.3s ease; transform: translateX(-50%); }
-.tab-btn:hover:not(.active)::after { width: 80%; }
+.tab-btn { font-family: 'Inter', system-ui, sans-serif; font-size: 13px; font-weight: 600; padding: 10px 18px; background: var(--bg); border: 1.5px solid var(--border); border-radius: 8px; cursor: pointer; color: var(--muted); white-space: nowrap; min-height: 42px; display: flex; align-items: center; gap: 8px; -webkit-tap-highlight-color: transparent; flex-shrink: 0; transition: all 0.25s ease; position: relative; }
+.tab-btn svg { width: 16px; height: 16px; flex-shrink: 0; transition: all 0.25s ease; }
+.tab-btn.active { color: #fff; background: var(--accent); border-color: var(--accent); box-shadow: 0 2px 12px rgba(62, 90, 138, 0.3); }
+.tab-btn.active svg { stroke: #fff; }
+.tab-btn:hover:not(.active) { color: var(--accent); border-color: var(--accent); background: var(--accent-light); transform: translateY(-1px); box-shadow: 0 2px 8px rgba(62, 90, 138, 0.12); }
+.tab-btn:hover:not(.active) svg { transform: scale(1.1); stroke: var(--accent); }
 
 /* PANELS */
 .panel { display: none; padding: 24px; }
@@ -92,7 +92,19 @@ body {
 .slider-wrap { display: flex; align-items: center; gap: 12px; }
 
 /* SLIDER */
-input[type=range] { -webkit-appearance: none; appearance: none; flex: 1; min-width: 100px; max-width: 240px; height: 8px; background: var(--border); border-radius: 4px; outline: none; cursor: pointer; touch-action: pan-x; margin: 10px 0; }
+.dual-slider { display: flex; align-items: center; gap: 12px; }
+.dual-slider-track { position: relative; flex: 1; height: 28px; min-width: 120px; }
+.dual-slider-track input[type=range] { -webkit-appearance: none; appearance: none; position: absolute; top: 0; left: 0; width: 100%; max-width: none; height: 28px; background: transparent; pointer-events: none; outline: none; margin: 0; z-index: 2; }
+.dual-slider-track input[type=range]:last-of-type { z-index: 4; }
+.dual-slider-track input[type=range]::-webkit-slider-runnable-track { height: 28px; background: transparent; border-radius: 4px; }
+.dual-slider-track input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; margin-top: 3px; border-radius: 50%; background: var(--accent); border: 2px solid #fff; box-shadow: 0 2px 8px rgba(0,102,204,.2), 0 1px 4px rgba(0,0,0,.1); cursor: pointer; pointer-events: all; position: relative; z-index: 5; transition: transform 0.2s ease; }
+.dual-slider-track input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); box-shadow: 0 4px 16px rgba(0,102,204,.3); }
+.dual-slider-track input[type=range]::-moz-range-track { height: 28px; background: transparent; border-radius: 4px; }
+.dual-slider-track input[type=range]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 50%; background: var(--accent); border: 2px solid #fff; box-shadow: 0 2px 8px rgba(0,102,204,.2); cursor: pointer; pointer-events: all; }
+.dual-slider-fill { position: absolute; top: 10px; height: 8px; background: var(--accent); opacity: 0.25; border-radius: 4px; pointer-events: none; z-index: 1; }
+.dual-slider-track::before { content: ''; position: absolute; top: 10px; left: 0; right: 0; height: 8px; background: var(--border); border-radius: 4px; z-index: 0; }
+.dual-slider-track input[type=range]:first-of-type:hover { z-index: 5; }
+input[type=range] { -webkit-appearance: none; appearance: none; flex: 1; min-width: 100px; max-width: none; height: 8px; background: var(--border); border-radius: 4px; outline: none; cursor: pointer; touch-action: pan-x; margin: 10px 0; }
 input[type=range]::-webkit-slider-runnable-track { height: 8px; background: var(--border); border-radius: 4px; }
 input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; margin-top: -6px; border-radius: 50%; background: var(--accent); border: 2px solid #fff; box-shadow: 0 2px 8px rgba(0,102,204,.2), 0 1px 4px rgba(0,0,0,.1); cursor: pointer; transition: all 0.2s ease; }
 input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.1); box-shadow: 0 4px 16px rgba(0,102,204,.3), 0 2px 8px rgba(0,0,0,.15); }
@@ -147,16 +159,16 @@ input[type=range]::-moz-range-thumb { width: 20px; height: 20px; border-radius: 
   .kpi-row { grid-template-columns: 1fr 1fr; gap: 12px; padding: 16px; }
   .kpi { padding: 16px 12px; }
   .kpi-value { font-size: 16px; }
-  .panel { padding: 16px; }
-  .tabs-bar { padding: 0; }
-  .tab-btn { font-size: 12px; padding: 10px 4px 8px; flex: 1; justify-content: center; flex-direction: column; gap: 4px; min-height: 44px; }
+  .panel { padding: 12px; }
+  .tabs-bar { padding: 8px 12px 12px; gap: 6px; }
+  .tab-btn { font-size: 11px; padding: 8px 10px; flex: 1; justify-content: center; flex-direction: column; gap: 4px; min-height: 44px; }
   .tab-btn svg { width: 18px; height: 18px; }
   .footer-bar { padding: 16px; }
-  input[type=range] { max-width: 160px; }
+  input[type=range] { max-width: none; }
   .controls { gap: 16px; }
 }
 @media (max-width: 380px) {
-  .tab-btn { font-size: 10px; padding: 8px 2px 6px; }
+  .tab-btn { font-size: 10px; padding: 6px 6px; }
 }
 </style>
 </head>
@@ -177,6 +189,7 @@ input[type=range]::-moz-range-thumb { width: 20px; height: 20px; border-radius: 
       <div class="kpi"><div class="kpi-label">Marktaustritt 2025</div><div class="kpi-value">3 Banken</div><div class="kpi-sub">Radicant, Kaspar&amp;, Yapeal</div></div>
     </div>
   </details>
+  <div class="tabs-label">Ansicht wählen</div>
   <div class="tabs-bar" id="tabsBar">
     <button class="tab-btn active" data-tab="zeitverlauf">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -214,17 +227,15 @@ input[type=range]::-moz-range-thumb { width: 20px; height: 20px; border-radius: 
   <!-- TAB 1 -->
   <div class="panel active" id="tab-zeitverlauf">
     <div class="controls">
-      <div class="control-group">
-        <div class="control-label">Startjahr ← ziehen</div>
-        <div class="slider-wrap">
-          <input type="range" id="sliderZeitStart" min="2020" max="2025" value="2020" step="1">
+      <div class="control-group" style="flex:1 1 100%">
+        <div class="control-label">Zeitraum wählen ← ziehen</div>
+        <div class="dual-slider">
           <span class="slider-val" id="valZeitStart">2020</span>
-        </div>
-      </div>
-      <div class="control-group">
-        <div class="control-label">Endjahr ← ziehen</div>
-        <div class="slider-wrap">
-          <input type="range" id="sliderZeitEnd" min="2021" max="2026" value="2026" step="1">
+          <div class="dual-slider-track">
+            <input type="range" id="sliderZeitStart" min="2020" max="2026" value="2020" step="1">
+            <input type="range" id="sliderZeitEnd" min="2020" max="2026" value="2026" step="1">
+            <div class="dual-slider-fill" id="dualSliderFill"></div>
+          </div>
           <span class="slider-val" id="valZeitEnd">2026</span>
         </div>
       </div>
@@ -412,7 +423,7 @@ function drawLine(containerId, startYear, endYear){
   var wrap = document.getElementById(containerId);
   wrap.innerHTML = '';
   var mob=isMobile();
-  var W=mob?400:800, H=mob?380:320, PL=mob?44:58, PR=mob?12:18, PT=20, PB=mob?38:44;
+  var W=mob?400:800, H=mob?500:400, PL=mob?44:58, PR=mob?12:18, PT=20, PB=mob?38:44;
   var iW=W-PL-PR, iH=H-PT-PB;
 
   /* filter rows */
@@ -528,7 +539,7 @@ function drawDonut(containerId, year){
   var wrap = document.getElementById(containerId);
   wrap.innerHTML='';
   var mob=isMobile();
-  var W=mob?320:520, H=mob?480:300, CX=mob?160:170, CY=mob?130:150, R=mob?100:110, r=mob?55:62;
+  var W=mob?320:520, H=mob?540:360, CX=mob?160:260, CY=mob?160:180, R=mob?120:140, r=mob?66:78;
   var activeBanks = BANKS.filter(function(b){ return vis[b]; });
   var data = activeBanks.map(function(b){ return {bank:b,val:DEC[year]?DEC[year][b]||0:0}; });
   var total = data.reduce(function(s,d){ return s+d.val; },0)||1;
@@ -584,7 +595,7 @@ function drawBar(containerId, endYear){
   var activeBanks = BANKS.filter(function(b){ return vis[b]; });
 
   var mob=isMobile();
-  var W=mob?400:800, H=mob?380:320, PL=mob?44:58, PR=mob?12:18, PT=20, PB=mob?38:44;
+  var W=mob?400:800, H=mob?500:400, PL=mob?44:58, PR=mob?12:18, PT=20, PB=mob?38:44;
   var iW=W-PL-PR, iH=H-PT-PB;
 
   /* compute data */
@@ -684,8 +695,15 @@ function redrawZeit(){
   var s=parseInt(document.getElementById('sliderZeitStart').value);
   var e=parseInt(document.getElementById('sliderZeitEnd').value);
   if(s>=e){ s=e-1; document.getElementById('sliderZeitStart').value=s; }
+  if(e<=s){ e=s+1; document.getElementById('sliderZeitEnd').value=e; }
   document.getElementById('valZeitStart').textContent=s;
   document.getElementById('valZeitEnd').textContent=e;
+  /* update fill bar */
+  var mn=2020, mx=2026;
+  var pctL=((s-mn)/(mx-mn))*100;
+  var pctR=((e-mn)/(mx-mn))*100;
+  var fill=document.getElementById('dualSliderFill');
+  if(fill){ fill.style.left=pctL+'%'; fill.style.width=(pctR-pctL)+'%'; }
   drawLine('wrapZeit',s,e);
 }
 function redrawMarkt(){
