@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#1a1a2e">
+<title>Neobanken Schweiz – IFZ Retail Banking</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+:root {
+  --accent: #3E5A8A; --accent-dark: #2C4466; --accent-light: #E8EDF5;
+  --text: #2C3E50; --muted: #6C7B7F; --border: #BDC3C7;
+  --bg: #FFFFFF; --soft: #F4F6F7; --r: 6px;
+  --gradient: linear-gradient(135deg, #3E5A8A 0%, #2C4466 100%);
+}
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  background: #F4F6F7; color: var(--text);
+  min-height: 100vh; display: flex; flex-direction: column; align-items: center;
+  padding: 24px 8px 48px; overflow-x: hidden; line-height: 1.6;
+}
+.frame { width: 100%; max-width: 1200px; background: var(--bg); border-radius: 12px; box-shadow: 0 8px 40px rgba(0,0,0,.08), 0 2px 16px rgba(0,0,0,.04); border: 1px solid var(--border); overflow: hidden; }
+
+/* TOPBAR */
+.topbar { background: var(--gradient); color: #fff; padding: 16px 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.topbar-logo { font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500; line-height: 1.3; opacity:.9; border-right: 1px solid rgba(255,255,255,.2); padding-right: 16px; white-space: nowrap; letter-spacing: -0.01em; }
+.topbar-title { font-family: 'Inter', sans-serif; font-size: 16px; font-weight: 600; flex: 1; letter-spacing: -0.01em; }
+.topbar-badge { background: rgba(255,255,255,.15); backdrop-filter: blur(10px); color: #fff; font-size: 11px; font-weight: 500; padding: 6px 12px; border-radius: 20px; white-space: nowrap; border: 1px solid rgba(255,255,255,.1); }
+
+/* HERO */
+.hero { padding: 32px 24px 24px; border-bottom: 1px solid var(--border); }
+.hero h1 { font-family: 'Inter', sans-serif; font-size: 28px; font-weight: 600; margin-bottom: 12px; color: var(--text); line-height: 1.25; letter-spacing: -0.01em; }
+.hero p { font-size: 15px; color: var(--muted); line-height: 1.65; font-weight: 400; max-width: 90%; }
+
+/* HIGHLIGHTS */
+.highlights-header { padding: 16px 24px 0; }
+.highlights-header h2 { font-family: 'Inter', sans-serif; font-size: 18px; font-weight: 600; color: var(--text); margin: 0; letter-spacing: -0.01em; }
+
+/* ANIMATIONS */
+@keyframes kpiRotateIn {
+  0% {
+    opacity: 0;
+    transform: rotateY(-15deg) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: rotateY(0deg) scale(1);
+  }
+}
+
+/* KPI */
+.kpi-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; padding: 24px; border-bottom: 1px solid var(--border); }
+.kpi { background: var(--bg); border-radius: var(--r); padding: 24px 20px; border: 1px solid var(--border); box-shadow: 0 2px 8px rgba(0,0,0,.04); min-width: 0; position: relative; overflow: hidden; display: flex; flex-direction: column; height: 140px; animation: kpiRotateIn 0.8s ease-out forwards; transition: all 0.4s ease; }
+.kpi:nth-child(1) { animation-delay: 0.1s; }
+.kpi:nth-child(2) { animation-delay: 0.2s; }
+.kpi:nth-child(3) { animation-delay: 0.3s; }
+.kpi:nth-child(4) { animation-delay: 0.4s; }
+.kpi:hover { transform: rotateY(5deg) scale(1.02); box-shadow: 0 8px 24px rgba(62, 90, 138, 0.15), 0 4px 12px rgba(0,0,0,.08); }
+.kpi::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--accent); }
+.kpi-label { font-size: 11px; text-transform: uppercase; letter-spacing:.08em; color: var(--muted); margin-bottom: 12px; line-height: 1.3; font-weight: 500; height: 32px; display: flex; align-items: flex-start; }
+.kpi-value { font-size: 18px; font-weight: 600; line-height: 1.2; word-break: break-word; color: var(--accent); margin-top: auto; margin-bottom: 12px; }
+.kpi-sub { font-size: 12px; color: var(--muted); line-height: 1.4; margin-top: auto; }
+.kpi-accent { color: var(--accent); }
+
+/* TABS */
+.tabs-bar { display: flex; padding: 0 16px; border-bottom: 1px solid var(--border); overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; touch-action: pan-x; background: var(--soft); }
+.tabs-bar::-webkit-scrollbar { display: none; }
+.tab-btn { font-family: 'Inter', system-ui, sans-serif; font-size: 14px; font-weight: 500; padding: 16px 20px 14px; background: none; border: none; border-bottom: 2px solid transparent; margin-bottom: -1px; cursor: pointer; color: var(--muted); white-space: nowrap; min-height: 48px; display: flex; align-items: center; gap: 8px; -webkit-tap-highlight-color: transparent; flex-shrink: 0; transition: all 0.3s ease; position: relative; }
+.tab-btn svg { width: 16px; height: 16px; flex-shrink: 0; transition: all 0.3s ease; }
+.tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); background: var(--bg); box-shadow: 0 -2px 8px rgba(62, 90, 138, 0.1); }
+.tab-btn:hover:not(.active) { color: var(--text); background: rgba(255,255,255,0.9); transform: translateY(-1px); box-shadow: 0 2px 8px rgba(0,0,0,.08); }
+.tab-btn:hover:not(.active) svg { transform: scale(1.1); }
+.tab-btn::after { content: ''; position: absolute; bottom: -1px; left: 50%; width: 0; height: 2px; background: var(--accent); transition: all 0.3s ease; transform: translateX(-50%); }
+.tab-btn:hover:not(.active)::after { width: 80%; }
+
+/* PANELS */
+.panel { display: none; padding: 24px; }
+.panel.active { display: block; }
+
+/* CONTROLS */
+.controls { display: flex; align-items: flex-start; gap: 24px; margin-bottom: 24px; flex-wrap: wrap; }
+.control-group { display: flex; flex-direction: column; gap: 8px; min-width: 0; flex: 1 1 200px; }
+.control-label { font-size: 12px; text-transform: uppercase; letter-spacing:.08em; color: var(--muted); font-weight: 500; }
+.slider-wrap { display: flex; align-items: center; gap: 12px; }
+
+/* SLIDER */
+input[type=range] { -webkit-appearance: none; appearance: none; flex: 1; min-width: 100px; max-width: 240px; height: 8px; background: var(--border); border-radius: 4px; outline: none; cursor: pointer; touch-action: pan-x; margin: 10px 0; }
+input[type=range]::-webkit-slider-runnable-track { height: 8px; background: var(--border); border-radius: 4px; }
+input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; margin-top: -6px; border-radius: 50%; background: var(--accent); border: 2px solid #fff; box-shadow: 0 2px 8px rgba(0,102,204,.2), 0 1px 4px rgba(0,0,0,.1); cursor: pointer; transition: all 0.2s ease; }
+input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.1); box-shadow: 0 4px 16px rgba(0,102,204,.3), 0 2px 8px rgba(0,0,0,.15); }
+input[type=range]::-moz-range-track { height: 8px; background: var(--border); border-radius: 4px; }
+input[type=range]::-moz-range-thumb { width: 20px; height: 20px; border-radius: 50%; background: var(--accent); border: 2px solid #fff; box-shadow: 0 2px 8px rgba(0,102,204,.2); cursor: pointer; }
+.slider-val { font-size: 14px; font-weight: 600; color: var(--accent); min-width: 40px; flex-shrink: 0; }
+
+/* LEGEND */
+.legend { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; align-items: center; }
+.legend-hint { font-size: 12px; color: var(--muted); font-style: italic; width: 100%; margin-bottom: 6px; font-weight: 400; }
+.legend-item { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border); cursor: pointer; font-size: 13px; font-weight: 500; user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent; min-height: 38px; transition: all .2s ease; background: var(--bg); }
+.legend-item:hover { border-color: var(--accent); box-shadow: 0 2px 8px rgba(0,102,204,.1); }
+.legend-item.off { opacity: .4; background: var(--soft); }
+.legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+/* SVG CHART CONTAINER */
+.chart-wrap { width: 100%; overflow: hidden; position: relative; }
+.chart-wrap svg { display: block; width: 100%; }
+
+/* TOOLTIP */
+.tooltip { position: fixed; background: rgba(20,20,40,.88); color: #fff; font-size: 11.5px; padding: 7px 11px; border-radius: 6px; pointer-events: none; opacity: 0; transition: opacity .12s; z-index: 999; max-width: 200px; line-height: 1.5; white-space: pre; }
+
+/* NOTICE */
+.notice { margin-top: 16px; font-size: 12px; color: var(--muted); line-height: 1.6; border-left: 4px solid var(--accent); padding: 12px 16px; background: var(--accent-light); border-radius: 0 var(--r) var(--r) 0; font-weight: 400; }
+
+/* TIMELINE */
+.tl-year { font-family: 'Source Serif 4', Georgia, serif; font-size: 13.5px; font-weight: 600; color: var(--accent); margin: 16px 0 8px; display: flex; align-items: center; gap: 8px; }
+.tl-year::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.tl-event { display: flex; gap: 12px; margin-bottom: 11px; align-items: flex-start; }
+.tl-dot-wrap { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
+.tl-dot { width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
+.tl-line { width: 2px; background: var(--border); flex: 1; min-height: 18px; margin-top: 3px; }
+.tl-content { flex: 1; min-width: 0; }
+.tl-date { font-size: 10.5px; color: var(--muted); margin-bottom: 1px; }
+.tl-title { font-size: 13px; font-weight: 600; margin-bottom: 2px; line-height: 1.35; }
+.tl-desc { font-size: 12px; color: var(--muted); line-height: 1.45; }
+.tl-bank { display: inline-block; font-size: 10px; font-weight: 700; padding: 1px 7px; border-radius: 10px; margin-bottom: 3px; color: #fff; }
+
+/* FOOTER */
+.footer-bar { padding: 20px 24px; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; background: var(--soft); flex-wrap: wrap; gap: 16px; }
+.footer-note { font-size: 13px; color: var(--muted); flex: 1; min-width: 200px; line-height: 1.5; }
+.footer-note a { color: var(--accent); text-decoration: none; font-weight: 500; }
+.footer-note a:hover { text-decoration: underline; }
+.btn-export { font-family: 'Inter', system-ui, sans-serif; font-size: 14px; font-weight: 500; padding: 12px 24px; background: var(--gradient); color: #fff; border: none; border-radius: var(--r); cursor: pointer; min-height: 44px; -webkit-tap-highlight-color: transparent; white-space: nowrap; transition: all 0.2s ease; box-shadow: 0 2px 8px rgba(0,102,204,.2); }
+.btn-export:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(0,102,204,.3); }
+.btn-export:active { transform: translateY(0); background: var(--accent-dark); }
+
+/* RESPONSIVE */
+@media (max-width: 600px) {
+  body { padding: 0 0 40px; }
+  .frame { border-radius: 0; border-left: none; border-right: none; box-shadow: none; }
+  .topbar { padding: 16px; }
+  .topbar-badge { display: none; }
+  .hero { padding: 20px 16px 16px; }
+  .hero h1 { font-size: 22px; }
+  .kpi-row { grid-template-columns: 1fr 1fr; gap: 12px; padding: 16px; }
+  .kpi { padding: 16px 12px; }
+  .kpi-value { font-size: 16px; }
+  .panel { padding: 16px; }
+  .tabs-bar { padding: 0 8px; }
+  .tab-btn { font-size: 13px; padding: 12px 12px 10px; }
+  .footer-bar { padding: 16px; }
+  input[type=range] { max-width: 160px; }
+  .controls { gap: 16px; }
+}
+@media (max-width: 380px) {
+  .tab-btn { font-size: 11px; padding: 10px 7px 9px; }
+}
+</style>
+</head>
+<body>
+<div class="frame">
+  <div class="topbar">
+    <div class="topbar-logo">IFZ<br>Retail Banking Blog</div>
+    <div class="topbar-title">Neobanken in der Schweiz</div>
+    <div class="topbar-badge">IFZ HSLU · April 2026</div>
+  </div>
+  <div class="hero">
+    <h1>Marktanteile &amp; Kundenzahlen 2020–2026</h1>
+    <p>Zeitreihen zu den Nutzerzahlen der in der Schweiz aktiven Neobanken. Werte zwischen Datenpunkten linear interpoliert; Prognosen ab Jan 2026 sind IFZ-Schätzungen. Quelle: Angaben der Neobanken, Medienberichte &amp; Swiss Payment Monitor (SPM) HSG/ZHAW.</p>
+  </div>
+  <div class="highlights-header">
+    <h2>Highlights</h2>
+  </div>
+  <div class="kpi-row">
+    <div class="kpi"><div class="kpi-label">Grösste Neobank 2025</div><div class="kpi-value"><span class="kpi-accent">Revolut</span></div><div class="kpi-sub">~1,16 Mio. Nutzer:innen</div></div>
+    <div class="kpi"><div class="kpi-label">Gesamtmarkt Ende 2025</div><div class="kpi-value">~2,2 Mio.</div><div class="kpi-sub">Alle Neobanken CH</div></div>
+    <div class="kpi"><div class="kpi-label">Yuh Wachstum 2021–25</div><div class="kpi-value">+<span class="kpi-accent">399k</span></div><div class="kpi-sub">Stärkstes CH-Wachstum</div></div>
+    <div class="kpi"><div class="kpi-label">Marktaustritt 2025</div><div class="kpi-value">3 Banken</div><div class="kpi-sub">Radicant, Kaspar&amp;, Yapeal</div></div>
+  </div>
+  <div class="tabs-bar" id="tabsBar">
+    <button class="tab-btn active" data-tab="zeitverlauf">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="3,18 7,12 11,14 17,6 21,10"></polyline>
+        <polyline points="21,10 18,10 18,7"></polyline>
+      </svg>
+      Zeitverlauf
+    </button>
+    <button class="tab-btn" data-tab="marktanteile">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path>
+        <path d="m22 12-3-3v6l3-3z"></path>
+      </svg>
+      Marktanteile
+    </button>
+    <button class="tab-btn" data-tab="wachstum">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="12" y1="20" x2="12" y2="10"></line>
+        <line x1="18" y1="20" x2="18" y2="4"></line>
+        <line x1="6" y1="20" x2="6" y2="16"></line>
+      </svg>
+      Wachstum
+    </button>
+    <button class="tab-btn" data-tab="ereignisse">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+        <line x1="16" y1="2" x2="16" y2="6"></line>
+        <line x1="8" y1="2" x2="8" y2="6"></line>
+        <line x1="3" y1="10" x2="21" y2="10"></line>
+      </svg>
+      Ereignisse
+    </button>
+  </div>
+
+  <!-- TAB 1 -->
+  <div class="panel active" id="tab-zeitverlauf">
+    <div class="controls">
+      <div class="control-group">
+        <div class="control-label">Startjahr ← ziehen</div>
+        <div class="slider-wrap">
+          <input type="range" id="sliderZeitStart" min="2020" max="2025" value="2020" step="1">
+          <span class="slider-val" id="valZeitStart">2020</span>
+        </div>
+      </div>
+      <div class="control-group">
+        <div class="control-label">Endjahr ← ziehen</div>
+        <div class="slider-wrap">
+          <input type="range" id="sliderZeitEnd" min="2021" max="2026" value="2026" step="1">
+          <span class="slider-val" id="valZeitEnd">2026</span>
+        </div>
+      </div>
+    </div>
+    <div class="legend" id="legendZeit"></div>
+    <div class="chart-wrap" id="wrapZeit"></div>
+    <div class="notice">✱ Gestrichelte Linie = IFZ-Prognose ab Jan 2026. Revolut zählt alle KYC-verifizierten Nutzer:innen. Wise &amp; N26 sind SPM-Schätzungen.</div>
+  </div>
+
+  <!-- TAB 2 -->
+  <div class="panel" id="tab-marktanteile">
+    <div class="controls">
+      <div class="control-group">
+        <div class="control-label">Referenzjahr ← ziehen</div>
+        <div class="slider-wrap">
+          <input type="range" id="sliderMarkt" min="2021" max="2026" value="2025" step="1">
+          <span class="slider-val" id="valMarkt">2025</span>
+        </div>
+      </div>
+    </div>
+    <div class="legend" id="legendMarkt"></div>
+    <div class="chart-wrap" id="wrapMarkt"></div>
+    <div class="notice">Marktanteile per Dezember des gewählten Jahres. 2026 = Prognose.</div>
+  </div>
+
+  <!-- TAB 3 -->
+  <div class="panel" id="tab-wachstum">
+    <div class="controls">
+      <div class="control-group">
+        <div class="control-label">Bis Jahr ← ziehen</div>
+        <div class="slider-wrap">
+          <input type="range" id="sliderWachstum" min="2022" max="2026" value="2025" step="1">
+          <span class="slider-val" id="valWachstum">2025</span>
+        </div>
+      </div>
+    </div>
+    <div class="legend" id="legendWachstum"></div>
+    <div class="chart-wrap" id="wrapWachstum"></div>
+    <div class="notice">Jährliches Wachstum = Differenz Dez. vs. Dez. Vorjahr.</div>
+  </div>
+
+  <!-- TAB 4 -->
+  <div class="panel" id="tab-ereignisse">
+    <div class="controls">
+      <div class="control-group">
+        <div class="control-label">Zeitraum bis ← ziehen</div>
+        <div class="slider-wrap">
+          <input type="range" id="sliderEreignisse" min="2020" max="2026" value="2026" step="1">
+          <span class="slider-val" id="valEreignisse">2026</span>
+        </div>
+      </div>
+    </div>
+    <div id="timelineContainer"></div>
+  </div>
+
+  <div class="footer-bar">
+    <div class="footer-note">Quelle: <a href="https://hub.hslu.ch/retailbanking/neobanken/" target="_blank" rel="noopener">IFZ Retail Banking Blog, HSLU</a> · Stand April 2026</div>
+    <button class="btn-export" id="btnExport">⬇ HTML exportieren</button>
+  </div>
+</div>
+
+<!-- TOOLTIP -->
+<div class="tooltip" id="tooltip"></div>
+
+<script>
+(function(){
+'use strict';
+
+/* ═══ DATA ═══ */
+var BANKS = ['Revolut','Yuh','Neon','Wise','Zak','N26','Alpian'];
+var C = {Revolut:'#E85D75',Yuh:'#F4A261',Neon:'#2ECC71',Wise:'#5DADE2',Zak:'#BB8FCE',N26:'#34495E',Alpian:'#48C9B0'};
+var FORECAST = '2026-01';
+
+var RAW = [
+  ['2020-01',{Revolut:280649,Neon:17541,Zak:25366,Wise:55604,N26:5683,Yuh:null,Alpian:null}],
+  ['2020-02',{Revolut:288082,Neon:19918,Zak:26443,Wise:56095,N26:7023,Yuh:null,Alpian:null}],
+  ['2020-03',{Revolut:296027,Neon:22459,Zak:27594,Wise:56619,N26:8455,Yuh:null,Alpian:null}],
+  ['2020-04',{Revolut:303716,Neon:24918,Zak:28709,Wise:57127,N26:9841,Yuh:null,Alpian:null}],
+  ['2020-06',{Revolut:319351,Neon:29918,Zak:30974,Wise:58159,N26:12659,Yuh:null,Alpian:null}],
+  ['2020-09',{Revolut:342930,Neon:37459,Zak:34391,Wise:59715,N26:16910,Yuh:null,Alpian:null}],
+  ['2020-12',{Revolut:366510,Neon:47562,Zak:37809,Wise:61271,N26:21160,Yuh:null,Alpian:null}],
+  ['2021-03',{Revolut:389577,Neon:58719,Zak:40924,Wise:62794,N26:25318,Yuh:null,Alpian:null}],
+  ['2021-06',{Revolut:412900,Neon:70000,Zak:43636,Wise:64333,N26:29523,Yuh:5495,Alpian:null}],
+  ['2021-09',{Revolut:436480,Neon:80880,Zak:46379,Wise:65889,N26:33773,Yuh:22344,Alpian:null}],
+  ['2021-12',{Revolut:460060,Neon:91761,Zak:49121,Wise:67446,N26:38024,Yuh:39194,Alpian:null}],
+  ['2022-03',{Revolut:483127,Neon:102405,Zak:51803,Wise:68968,N26:42182,Yuh:55065,Alpian:null}],
+  ['2022-06',{Revolut:506450,Neon:113167,Zak:54516,Wise:73288,N26:45411,Yuh:69935,Alpian:null}],
+  ['2022-09',{Revolut:530030,Neon:124047,Zak:57258,Wise:83370,N26:46671,Yuh:84967,Alpian:null}],
+  ['2022-12',{Revolut:553610,Neon:134928,Zak:60000,Wise:93452,N26:47932,Yuh:100000,Alpian:1203}],
+  ['2023-03',{Revolut:576677,Neon:145572,Zak:61408,Wise:103315,N26:49164,Yuh:121176,Alpian:3109}],
+  ['2023-06',{Revolut:600000,Neon:156334,Zak:62833,Wise:111230,N26:50410,Yuh:142588,Alpian:5105}],
+  ['2023-09',{Revolut:642991,Neon:168905,Zak:64272,Wise:115000,N26:51667,Yuh:164235,Alpian:7123}],
+  ['2023-12',{Revolut:685981,Neon:182336,Zak:65712,Wise:118770,N26:52923,Yuh:185882,Alpian:9141}],
+  ['2024-03',{Revolut:728505,Neon:195620,Zak:67136,Wise:122500,N26:54167,Yuh:207243,Alpian:11136}],
+  ['2024-06',{Revolut:771028,Neon:210000,Zak:68560,Wise:127466,N26:56233,Yuh:228505,Alpian:13132}],
+  ['2024-09',{Revolut:849180,Neon:218171,Zak:70000,Wise:135027,N26:60014,Yuh:250000,Alpian:15150}],
+  ['2024-12',{Revolut:933702,Neon:226342,Zak:72160,Wise:142589,N26:63795,Yuh:300000,Alpian:17168}],
+  ['2025-03',{Revolut:983425,Neon:234336,Zak:74272,Wise:149986,N26:67493,Yuh:321067,Alpian:18856}],
+  ['2025-06',{Revolut:1040000,Neon:239280,Zak:76408,Wise:157629,N26:71315,Yuh:342369,Alpian:20820}],
+  ['2025-09',{Revolut:1100000,Neon:242720,Zak:78568,Wise:165787,N26:75408,Yuh:370785,Alpian:23333}],
+  ['2025-12',{Revolut:1160000,Neon:246451,Zak:80739,Wise:174368,N26:79737,Yuh:399201,Alpian:27000}],
+  ['2026-01',{Revolut:1180000,Neon:247911,Zak:81484,Wise:177325,N26:81234,Yuh:407601,Alpian:28500}],
+  ['2026-03',{Revolut:1220000,Neon:250856,Zak:82996,Wise:183392,N26:84314,Yuh:424401,Alpian:31500}],
+  ['2026-06',{Revolut:1310000,Neon:257700,Zak:86575,Wise:198379,N26:91998,Yuh:462201,Alpian:38251}],
+  ['2026-12',{Revolut:1400000,Neon:264549,Zak:90154,Wise:213365,N26:99682,Yuh:500000,Alpian:45001}]
+];
+
+/* December snapshots for donut/bar */
+var DEC = {
+  2020:{Revolut:366510,Neon:47562,Zak:37809,Wise:61271,N26:21160,Yuh:0,Alpian:0},
+  2021:{Revolut:460060,Neon:91761,Zak:49121,Wise:67446,N26:38024,Yuh:39194,Alpian:0},
+  2022:{Revolut:553610,Neon:134928,Zak:60000,Wise:93452,N26:47932,Yuh:100000,Alpian:1203},
+  2023:{Revolut:685981,Neon:182336,Zak:65712,Wise:118770,N26:52923,Yuh:185882,Alpian:9141},
+  2024:{Revolut:933702,Neon:226342,Zak:72160,Wise:142589,N26:63795,Yuh:300000,Alpian:17168},
+  2025:{Revolut:1160000,Neon:246451,Zak:80739,Wise:174368,N26:79737,Yuh:399201,Alpian:27000},
+  2026:{Revolut:1400000,Neon:264549,Zak:90154,Wise:213365,N26:99682,Yuh:500000,Alpian:45001}
+};
+
+var EVENTS = [
+  {year:2020,month:'Jan',bank:'Zak',color:'#6a4c93',title:'Zak (Cler) – erste CH Neobank seit 2018',desc:'Kontinuierliches Wachstum seit dem Start.'},
+  {year:2021,month:'Feb',bank:'Zak',color:'#6a4c93',title:'Zak: 40 000 Kunden',desc:'Erster öffentlicher Meilenstein.'},
+  {year:2021,month:'Mai',bank:'Yuh',color:'#f4a261',title:'Yuh lanciert (PostFinance × Swissquote)',desc:'Neues Joint Venture startet im Schweizer Markt.'},
+  {year:2021,month:'Jun',bank:'Neon',color:'#2a9d8f',title:'Neon: 70 000 Kunden + CHF 7 Mio. Finanzierung',desc:'Equity-Crowdinvesting für Kunden lanciert.'},
+  {year:2022,month:'Feb',bank:'Yuh',color:'#f4a261',title:'Yuh: 50 000 Kunden',desc:'9 Monate nach Launch erste grosse Marke erreicht.'},
+  {year:2022,month:'Okt',bank:'Alpian',color:'#4AAFBF',title:'Alpian lanciert (Intesa Sanpaolo)',desc:'Fokus auf digitale Vermögensverwaltung.'},
+  {year:2022,month:'Dez',bank:'Yuh',color:'#f4a261',title:'Yuh: 100 000 Kunden',desc:'Sechsstellige Kundenzahl zum Jahresende.'},
+  {year:2023,month:'Jun',bank:'Revolut',color:'#e63946',title:'Revolut: 600 000 Nutzer CH',desc:'Revolut überschreitet 600\'000-Marke.'},
+  {year:2023,month:'Jul',bank:'Neon',color:'#2a9d8f',title:'Neon Invest lanciert',desc:'Aktien- und ETF-Handel in der Neon-App.'},
+  {year:2024,month:'Feb',bank:'Yuh',color:'#f4a261',title:'Yuh: 200 000 Kunden + Profitabilität',desc:'Yuh meldet erstmals Profitabilität.'},
+  {year:2024,month:'Apr',bank:'Neon',color:'#2a9d8f',title:'Neon: 200 000 Kunden',desc:'Meilenstein für das Zürcher Startup.'},
+  {year:2024,month:'Aug',bank:'Revolut',color:'#e63946',title:'Revolut: 800 000 Nutzer CH',desc:'Starkes Wachstum.'},
+  {year:2024,month:'Dez',bank:'Yuh',color:'#f4a261',title:'Yuh: 300 000 Kunden',desc:'Yuh nähert sich Neon stark an.'},
+  {year:2025,month:'Apr',bank:'Revolut',color:'#e63946',title:'Revolut: 1 Million Nutzer CH',desc:'Grösste Neobank der Schweiz.'},
+  {year:2025,month:'Mai',bank:'Alpian',color:'#4AAFBF',title:'Alpian: 20 000 Kunden',desc:'Wachstum im Premium-Segment.'},
+  {year:2025,month:'Nov',bank:'Kaspar&',color:'#999',title:'Kaspar& – Rückzug aus Privatkundengeschäft',desc:'Künftiger Fokus auf Banking-as-a-Service.'},
+  {year:2025,month:'Nov',bank:'Radicant',color:'#999',title:'Radicant stellt Betrieb ein',desc:'~20 000 Kunden wechseln zu Alpian.'},
+  {year:2025,month:'Nov',bank:'Yapeal',color:'#999',title:'Yapeal fokussiert auf Firmenkunden',desc:'Privatkundenapp ohne aktives Marketing.'},
+  {year:2025,month:'Dez',bank:'Yuh',color:'#f4a261',title:'Yuh überholt Neon: 399 000 Kunden',desc:'Yuh wird grösste CH-Neobank (exkl. Revolut).'},
+  {year:2026,month:'Jan',bank:'Alpian',color:'#4AAFBF',title:'Alpian übernimmt ~20 000 Radicant-Kunden',desc:'Ziel: 45 000+ Kunden 2026.'},
+  {year:2026,month:'Mrz',bank:'Yuh',color:'#f4a261',title:'Yuh gehört 100% Swissquote',desc:'PostFinance verkauft seinen Anteil.'}
+];
+
+/* ═══ STATE ═══ */
+var vis = {};
+BANKS.forEach(function(b){ vis[b]=true; });
+
+/* ═══ HELPERS ═══ */
+function fmt(n){
+  if(n==null||n===undefined) return '–';
+  if(n>=1e6) return (n/1e6).toFixed(2).replace('.',',')+' Mio.';
+  if(n>=1000) return n.toLocaleString ? n.toLocaleString('de-CH') : String(n);
+  return String(n);
+}
+function fmtK(n){
+  if(n==null) return '–';
+  if(n>=1e6) return (n/1e6).toFixed(1)+'M';
+  if(n>=1000) return Math.round(n/1000)+'k';
+  return String(Math.round(n));
+}
+var NS = 'http://www.w3.org/2000/svg';
+function el(tag,attrs,parent){
+  var e = document.createElementNS(NS,tag);
+  for(var k in attrs) e.setAttribute(k,attrs[k]);
+  if(parent) parent.appendChild(e);
+  return e;
+}
+
+/* ═══ TOOLTIP ═══ */
+var tip = document.getElementById('tooltip');
+function showTip(txt,evt){
+  tip.textContent = txt;
+  tip.style.opacity = '1';
+  moveTip(evt);
+}
+function moveTip(evt){
+  var x = evt.clientX||evt.touches&&evt.touches[0].clientX||0;
+  var y = evt.clientY||evt.touches&&evt.touches[0].clientY||0;
+  tip.style.left = Math.min(x+14, window.innerWidth-tip.offsetWidth-10)+'px';
+  tip.style.top  = Math.max(y-40, 4)+'px';
+}
+function hideTip(){ tip.style.opacity='0'; }
+
+/* ═══ SVG LINE CHART ═══ */
+function drawLine(containerId, startYear, endYear){
+  var wrap = document.getElementById(containerId);
+  wrap.innerHTML = '';
+  var W=800, H=320, PL=58, PR=18, PT=20, PB=44;
+  var iW=W-PL-PR, iH=H-PT-PB;
+
+  /* filter rows */
+  var rows = RAW.filter(function(r){
+    var y=parseInt(r[0]); return y>=startYear && y<=endYear;
+  });
+  if(!rows.length){ wrap.innerHTML='<p style="padding:20px;color:var(--muted)">Keine Daten.</p>'; return; }
+
+  var activeBanks = BANKS.filter(function(b){ return vis[b]; });
+
+  /* y scale */
+  var allVals=[];
+  rows.forEach(function(r){ activeBanks.forEach(function(b){ if(r[1][b]!=null) allVals.push(r[1][b]); }); });
+  var maxV = allVals.length ? Math.max.apply(null,allVals)*1.08 : 1;
+  maxV = Math.ceil(maxV/100000)*100000||1;
+
+  /* x positions */
+  var n=rows.length;
+  function xPos(i){ return PL + (i/(n-1||1))*iW; }
+  function yPos(v){ return PT+iH - (v/maxV)*iH; }
+
+  var svg = el('svg',{viewBox:'0 0 '+W+' '+H,preserveAspectRatio:'none'},wrap);
+
+  /* grid */
+  var steps=5;
+  for(var s=0;s<=steps;s++){
+    var gy = PT + iH - (s/steps)*iH;
+    el('line',{x1:PL,y1:gy,x2:PL+iW,y2:gy,stroke:'#e8edf2','stroke-width':'1'},svg);
+    var lv = Math.round((s/steps)*maxV);
+    el('text',{x:PL-6,y:gy+4,'text-anchor':'end','font-size':'10','fill':'#8a9ab0'},svg).textContent=fmtK(lv);
+  }
+
+  /* x labels — quarterly ticks */
+  rows.forEach(function(r,i){
+    var mo=r[0].slice(5);
+    if(mo==='01'||mo==='04'||mo==='07'||mo==='10'){
+      var lx=xPos(i);
+      el('line',{x1:lx,y1:PT,x2:lx,y2:PT+iH,stroke:'#f0f2f5','stroke-width':'1'},svg);
+      el('text',{x:lx,y:H-10,'text-anchor':'middle','font-size':'9','fill':'#8a9ab0'},svg).textContent=r[0].slice(2,7);
+    }
+  });
+
+  /* forecast divider */
+  var fiIdx = rows.findIndex(function(r){ return r[0]>=FORECAST; });
+  if(fiIdx>0){
+    var fx=xPos(fiIdx);
+    el('line',{x1:fx,y1:PT,x2:fx,y2:PT+iH,stroke:'#4AAFBF','stroke-width':'1.5','stroke-dasharray':'4,3'},svg);
+    el('text',{x:fx+3,y:PT+12,'font-size':'9','fill':'#4AAFBF'},svg).textContent='Prognose ✱';
+  }
+
+  /* lines */
+  activeBanks.forEach(function(bank){
+    /* split into solid (actual) and dashed (forecast) segments */
+    function buildPath(filter){
+      var d='', started=false;
+      rows.forEach(function(r,i){
+        if(!filter(r)) return;
+        var v=r[1][bank];
+        if(v==null){ started=false; return; }
+        var x=xPos(i), y=yPos(v);
+        if(!started){ d+='M'+x+','+y; started=true; }
+        else d+='L'+x+','+y;
+      });
+      return d;
+    }
+    var dSolid = buildPath(function(r){ return r[0]<FORECAST; });
+    var dDash  = buildPath(function(r){ return r[0]>=FORECAST; });
+    /* bridge: last solid point to first forecast point */
+    if(dSolid && dDash){
+      var lastSolidRow = null;
+      for(var i=rows.length-1;i>=0;i--){ if(rows[i][0]<FORECAST && rows[i][1][bank]!=null){ lastSolidRow=i; break; } }
+      var firstForeRow = null;
+      for(var j=0;j<rows.length;j++){ if(rows[j][0]>=FORECAST && rows[j][1][bank]!=null){ firstForeRow=j; break; } }
+      if(lastSolidRow!=null&&firstForeRow!=null){
+        dDash='M'+xPos(lastSolidRow)+','+yPos(rows[lastSolidRow][1][bank])+'L'+xPos(firstForeRow)+','+yPos(rows[firstForeRow][1][bank])+dDash.slice(dDash.indexOf('L'));
+      }
+    }
+    if(dSolid) el('path',{d:dSolid,fill:'none',stroke:C[bank],'stroke-width':'2.5','stroke-linecap':'round','stroke-linejoin':'round'},svg);
+    if(dDash)  el('path',{d:dDash,fill:'none',stroke:C[bank],'stroke-width':'2','stroke-dasharray':'6,4','stroke-linecap':'round'},svg);
+
+    /* label at end */
+    var lastR=null, lastI=-1;
+    for(var k=rows.length-1;k>=0;k--){ if(rows[k][1][bank]!=null){ lastR=rows[k]; lastI=k; break; } }
+    if(lastR){
+      var lx2=xPos(lastI), ly2=yPos(lastR[1][bank]);
+      el('circle',{cx:lx2,cy:ly2,r:'3',fill:C[bank]},svg);
+    }
+  });
+
+  /* hover overlay for tooltip */
+  var hitArea = el('rect',{x:PL,y:PT,width:iW,height:iH,fill:'transparent','pointer-events':'all'},svg);
+  function handleMove(evt){
+    evt.preventDefault();
+    var cx = evt.touches ? evt.touches[0].clientX : evt.clientX;
+    var rect = svg.getBoundingClientRect();
+    var svgX = (cx - rect.left) / rect.width * W;
+    var idx = Math.round((svgX-PL)/iW*(n-1));
+    idx = Math.max(0,Math.min(n-1,idx));
+    var row = rows[idx];
+    if(!row) return;
+    var lines = [row[0]];
+    activeBanks.forEach(function(b){ if(row[1][b]!=null) lines.push(b+': '+fmt(row[1][b])); });
+    showTip(lines.join('\n'), evt.touches ? evt.touches[0] : evt);
+  }
+  hitArea.addEventListener('mousemove', handleMove);
+  hitArea.addEventListener('touchmove', handleMove, {passive:false});
+  hitArea.addEventListener('mouseleave', hideTip);
+  hitArea.addEventListener('touchend', hideTip);
+}
+
+/* ═══ SVG DONUT ═══ */
+function drawDonut(containerId, year){
+  var wrap = document.getElementById(containerId);
+  wrap.innerHTML='';
+  var W=520, H=300, CX=170, CY=150, R=110, r=62;
+  var activeBanks = BANKS.filter(function(b){ return vis[b]; });
+  var data = activeBanks.map(function(b){ return {bank:b,val:DEC[year]?DEC[year][b]||0:0}; });
+  var total = data.reduce(function(s,d){ return s+d.val; },0)||1;
+
+  var svg = el('svg',{viewBox:'0 0 '+W+' '+H,preserveAspectRatio:'xMidYMid meet'},wrap);
+
+  /* donut slices */
+  var ang = -Math.PI/2;
+  data.forEach(function(d){
+    if(!d.val) return;
+    var a = (d.val/total)*Math.PI*2;
+    var x1=CX+R*Math.cos(ang), y1=CY+R*Math.sin(ang);
+    var x2=CX+R*Math.cos(ang+a), y2=CY+R*Math.sin(ang+a);
+    var xi=CX+r*Math.cos(ang+a), yi=CY+r*Math.sin(ang+a);
+    var xj=CX+r*Math.cos(ang), yj=CY+r*Math.sin(ang);
+    var lg=(a>Math.PI)?1:0;
+    var path='M'+x1+','+y1+' A'+R+','+R+' 0 '+lg+',1 '+x2+','+y2+' L'+xi+','+yi+' A'+r+','+r+' 0 '+lg+',0 '+xj+','+yj+' Z';
+    var pe = el('path',{d:path,fill:C[d.bank],stroke:'#fff','stroke-width':'2','cursor':'pointer'},svg);
+    var pct=(d.val/total*100).toFixed(1)+'%';
+    var ttxt=d.bank+': '+fmt(d.val)+' ('+pct+')';
+    pe.addEventListener('mouseenter',function(e){ showTip(ttxt,e); });
+    pe.addEventListener('mouseleave',hideTip);
+    pe.addEventListener('touchstart',function(e){ showTip(ttxt,e.touches[0]); e.preventDefault(); },{passive:false});
+    ang+=a;
+  });
+
+  /* center text */
+  var t1=el('text',{x:CX,y:CY-8,'text-anchor':'middle','font-size':'13','font-weight':'700','fill':'#1a1a2e'},svg);
+  t1.textContent=year;
+  var t2=el('text',{x:CX,y:CY+10,'text-anchor':'middle','font-size':'10','fill':'#5a6a7a'},svg);
+  t2.textContent='Total: '+fmtK(total-0);
+
+  /* legend right side */
+  var lx=310, ly=20, lh=22;
+  data.forEach(function(d,i){
+    if(!d.val) return;
+    var pct=(d.val/total*100).toFixed(1);
+    el('rect',{x:lx,y:ly+i*lh,width:12,height:12,fill:C[d.bank],rx:'3'},svg);
+    var lt=el('text',{x:lx+18,y:ly+i*lh+10,'font-family':'Inter, system-ui, sans-serif','font-size':'12','fill':'#2C3E50','font-weight':'500'},svg);
+    lt.textContent=d.bank+': '+fmtK(d.val)+' ('+pct+'%)';
+  });
+}
+
+/* ═══ SVG BAR CHART ═══ */
+function drawBar(containerId, endYear){
+  var wrap = document.getElementById(containerId);
+  wrap.innerHTML='';
+  var years=[];
+  for(var y=2021;y<=endYear;y++) years.push(y);
+  var activeBanks = BANKS.filter(function(b){ return vis[b]; });
+
+  var W=800, H=320, PL=58, PR=18, PT=20, PB=44;
+  var iW=W-PL-PR, iH=H-PT-PB;
+
+  /* compute data */
+  var seriesData={};
+  activeBanks.forEach(function(b){
+    seriesData[b]=years.map(function(yr){
+      var c=DEC[yr]?DEC[yr][b]:null, p=DEC[yr-1]?DEC[yr-1][b]:null;
+      return (c!=null&&p!=null&&c>0&&p>=0)?c-p:null;
+    });
+  });
+  var allVals2=[];
+  activeBanks.forEach(function(b){ seriesData[b].forEach(function(v){ if(v!=null) allVals2.push(v); }); });
+  var maxV2 = allVals2.length?Math.max.apply(null,allVals2)*1.1:1;
+  maxV2 = Math.ceil(maxV2/50000)*50000||1;
+
+  var svg = el('svg',{viewBox:'0 0 '+W+' '+H,preserveAspectRatio:'none'},wrap);
+
+  /* grid */
+  for(var s=0;s<=5;s++){
+    var gy=PT+iH-(s/5)*iH;
+    el('line',{x1:PL,y1:gy,x2:PL+iW,y2:gy,stroke:'#e8edf2','stroke-width':'1'},svg);
+    el('text',{x:PL-6,y:gy+4,'text-anchor':'end','font-size':'10','fill':'#8a9ab0'},svg).textContent=fmtK(Math.round((s/5)*maxV2));
+  }
+
+  var nY=years.length, gW=iW/nY, bW=gW*0.8/activeBanks.length, bOff=gW*0.1;
+  years.forEach(function(yr,yi){
+    var gx=PL+yi*gW;
+    activeBanks.forEach(function(b,bi){
+      var v=seriesData[b][yi];
+      if(v==null||v<=0) return;
+      var bh=(v/maxV2)*iH, bx=gx+bOff+bi*bW, by=PT+iH-bh;
+      var br=el('rect',{x:bx,y:by,width:bW-1,height:bh,fill:C[b],rx:'2','cursor':'pointer'},svg);
+      var ttxt=b+' '+yr+':\n+'+fmt(v);
+      br.addEventListener('mouseenter',function(e){ showTip(ttxt,e); });
+      br.addEventListener('mouseleave',hideTip);
+      br.addEventListener('touchstart',function(e){ showTip(ttxt,e.touches[0]); e.preventDefault(); },{passive:false});
+    });
+    el('text',{x:gx+gW/2,y:H-10,'text-anchor':'middle','font-size':'11','fill':'#5a6a7a'},svg).textContent=yr;
+  });
+}
+
+/* ═══ TIMELINE ═══ */
+function renderTimeline(){
+  var max=parseInt(document.getElementById('sliderEreignisse').value);
+  document.getElementById('valEreignisse').textContent=max;
+  var byY={};
+  EVENTS.filter(function(ev){ return ev.year<=max; }).forEach(function(ev){
+    if(!byY[ev.year]) byY[ev.year]=[];
+    byY[ev.year].push(ev);
+  });
+  var html='';
+  Object.keys(byY).sort().forEach(function(yr){
+    html+='<div class="tl-year">'+yr+'</div>';
+    var arr=byY[yr];
+    arr.forEach(function(ev,i){
+      html+='<div class="tl-event">'
+        +'<div class="tl-dot-wrap"><div class="tl-dot" style="background:'+ev.color+'"></div>'+(i<arr.length-1?'<div class="tl-line"></div>':'')+'</div>'
+        +'<div class="tl-content">'
+        +'<div class="tl-bank" style="background:'+ev.color+'">'+ev.bank+'</div>'
+        +'<div class="tl-date">'+ev.month+' '+ev.year+'</div>'
+        +'<div class="tl-title">'+ev.title+'</div>'
+        +'<div class="tl-desc">'+ev.desc+'</div>'
+        +'</div></div>';
+    });
+  });
+  document.getElementById('timelineContainer').innerHTML=html||'<p style="color:var(--muted);font-size:13px;padding:8px 0">Keine Ereignisse.</p>';
+}
+
+/* ═══ LEGENDS ═══ */
+function buildLegend(id, cb){
+  var c=document.getElementById(id);
+  c.innerHTML='<span class="legend-hint">Bank an-/abwählen</span>';
+  BANKS.forEach(function(bank){
+    var el2=document.createElement('div');
+    el2.className='legend-item';
+    el2.style.background=C[bank]+'22';
+    el2.style.borderColor=C[bank];
+    el2.innerHTML='<div class="legend-dot" style="background:'+C[bank]+'"></div>'+bank;
+    el2.addEventListener('click',function(){
+      vis[bank]=!vis[bank];
+      document.querySelectorAll('.legend-item').forEach(function(item){
+        var dot=item.querySelector('.legend-dot');
+        if(dot&&item.textContent.trim()===bank){
+          item.classList.toggle('off',!vis[bank]);
+          item.style.background=vis[bank]?C[bank]+'22':'#eee';
+          item.style.borderColor=vis[bank]?C[bank]:'#ccc';
+        }
+      });
+      cb();
+    });
+    c.appendChild(el2);
+  });
+}
+
+/* ═══ RENDER FUNCTIONS ═══ */
+function redrawZeit(){
+  var s=parseInt(document.getElementById('sliderZeitStart').value);
+  var e=parseInt(document.getElementById('sliderZeitEnd').value);
+  if(s>=e){ s=e-1; document.getElementById('sliderZeitStart').value=s; }
+  document.getElementById('valZeitStart').textContent=s;
+  document.getElementById('valZeitEnd').textContent=e;
+  drawLine('wrapZeit',s,e);
+}
+function redrawMarkt(){
+  var yr=parseInt(document.getElementById('sliderMarkt').value);
+  document.getElementById('valMarkt').textContent=yr;
+  drawDonut('wrapMarkt',yr);
+}
+function redrawWachstum(){
+  var e=parseInt(document.getElementById('sliderWachstum').value);
+  document.getElementById('valWachstum').textContent=e;
+  drawBar('wrapWachstum',e);
+}
+
+/* ═══ TABS ═══ */
+var tabsBar=document.getElementById('tabsBar');
+tabsBar.addEventListener('click',function(e){
+  var btn=e.target;
+  while(btn&&btn!==tabsBar&&!btn.dataset.tab) btn=btn.parentNode;
+  if(!btn||!btn.dataset.tab) return;
+  var tab=btn.dataset.tab;
+  document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
+  document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('active'); });
+  btn.classList.add('active');
+  document.getElementById('tab-'+tab).classList.add('active');
+  if(tab==='marktanteile') redrawMarkt();
+  if(tab==='wachstum') redrawWachstum();
+  if(tab==='ereignisse') renderTimeline();
+});
+
+/* ═══ SLIDER WIRING ═══ */
+document.getElementById('sliderZeitStart').addEventListener('input',redrawZeit);
+document.getElementById('sliderZeitEnd').addEventListener('input',redrawZeit);
+document.getElementById('sliderMarkt').addEventListener('input',redrawMarkt);
+document.getElementById('sliderWachstum').addEventListener('input',redrawWachstum);
+document.getElementById('sliderEreignisse').addEventListener('input',renderTimeline);
+
+buildLegend('legendZeit',redrawZeit);
+buildLegend('legendMarkt',redrawMarkt);
+buildLegend('legendWachstum',redrawWachstum);
+
+/* ═══ EXPORT ═══ */
+document.getElementById('btnExport').addEventListener('click',function(){
+  try{
+    var html='<!DOCTYPE html>'+document.documentElement.outerHTML;
+    var blob=new Blob([html],{type:'text/html;charset=utf-8'});
+    var url=URL.createObjectURL(blob);
+    var a=document.createElement('a');
+    a.href=url; a.download='neobanken-schweiz-ifz-2026.html';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(function(){ URL.revokeObjectURL(url); },10000);
+  }catch(err){ alert('Bitte Seite per "Speichern als" im Browser sichern (Ctrl/Cmd + S).'); }
+});
+
+/* ═══ RESIZE ═══ */
+var rt;
+window.addEventListener('resize',function(){
+  clearTimeout(rt);
+  rt=setTimeout(function(){
+    var at=document.querySelector('.panel.active');
+    if(!at) return;
+    var id=at.id.replace('tab-','');
+    if(id==='zeitverlauf') redrawZeit();
+    if(id==='marktanteile') redrawMarkt();
+    if(id==='wachstum') redrawWachstum();
+  },200);
+});
+
+/* ═══ INIT ═══ */
+redrawZeit();
+renderTimeline();
+
+})();
+</script>
+</body>
+</html>
