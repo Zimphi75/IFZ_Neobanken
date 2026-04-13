@@ -133,10 +133,6 @@ input[type=range]::-moz-range-thumb { width: 20px; height: 20px; border-radius: 
 .footer-note { font-size: 13px; color: var(--muted); flex: 1; min-width: 200px; line-height: 1.5; }
 .footer-note a { color: var(--accent); text-decoration: none; font-weight: 500; }
 .footer-note a:hover { text-decoration: underline; }
-.btn-export { font-family: 'Inter', system-ui, sans-serif; font-size: 14px; font-weight: 500; padding: 12px 24px; background: var(--gradient); color: #fff; border: none; border-radius: var(--r); cursor: pointer; min-height: 44px; -webkit-tap-highlight-color: transparent; white-space: nowrap; transition: all 0.2s ease; box-shadow: 0 2px 8px rgba(0,102,204,.2); }
-.btn-export:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(0,102,204,.3); }
-.btn-export:active { transform: translateY(0); background: var(--accent-dark); }
-
 /* RESPONSIVE */
 @media (max-width: 600px) {
   body { padding: 0 0 40px; }
@@ -285,7 +281,6 @@ input[type=range]::-moz-range-thumb { width: 20px; height: 20px; border-radius: 
 
   <div class="footer-bar">
     <div class="footer-note">Quelle: <a href="https://hub.hslu.ch/retailbanking/neobanken/" target="_blank" rel="noopener">IFZ Retail Banking Blog, HSLU</a> · Stand April 2026</div>
-    <button class="btn-export" id="btnExport">⬇ HTML exportieren</button>
   </div>
 </div>
 
@@ -729,19 +724,6 @@ document.getElementById('sliderEreignisse').addEventListener('input',renderTimel
 buildLegend('legendZeit',redrawZeit);
 buildLegend('legendMarkt',redrawMarkt);
 buildLegend('legendWachstum',redrawWachstum);
-
-/* ═══ EXPORT ═══ */
-document.getElementById('btnExport').addEventListener('click',function(){
-  try{
-    var html='<!DOCTYPE html>'+document.documentElement.outerHTML;
-    var blob=new Blob([html],{type:'text/html;charset=utf-8'});
-    var url=URL.createObjectURL(blob);
-    var a=document.createElement('a');
-    a.href=url; a.download='neobanken-schweiz-ifz-2026.html';
-    document.body.appendChild(a); a.click(); document.body.removeChild(a);
-    setTimeout(function(){ URL.revokeObjectURL(url); },10000);
-  }catch(err){ alert('Bitte Seite per "Speichern als" im Browser sichern (Ctrl/Cmd + S).'); }
-});
 
 /* ═══ RESIZE ═══ */
 var rt;
