@@ -38,8 +38,13 @@ body {
 .hero p { font-size: 15px; color: var(--muted); line-height: 1.65; font-weight: 400; max-width: 90%; }
 
 /* HIGHLIGHTS */
-.highlights-header { padding: 16px 24px 0; }
-.highlights-header h2 { font-family: 'Inter', sans-serif; font-size: 18px; font-weight: 600; color: var(--text); margin: 0; letter-spacing: -0.01em; }
+.highlights { border-bottom: 1px solid var(--border); }
+.highlights-toggle { display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; cursor: pointer; list-style: none; user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent; }
+.highlights-toggle::-webkit-details-marker { display: none; }
+.highlights-toggle h2 { font-family: 'Inter', sans-serif; font-size: 18px; font-weight: 600; color: var(--text); margin: 0; letter-spacing: -0.01em; }
+.toggle-icon { width: 24px; height: 24px; flex-shrink: 0; transition: transform 0.3s ease; }
+.toggle-icon::before { content: ''; display: block; width: 10px; height: 10px; border-right: 2px solid var(--muted); border-bottom: 2px solid var(--muted); transform: rotate(45deg); margin: 4px auto 0; transition: transform 0.3s ease; }
+.highlights[open] .toggle-icon::before { transform: rotate(-135deg); margin: 8px auto 0; }
 
 /* ANIMATIONS */
 @keyframes kpiRotateIn {
@@ -167,15 +172,15 @@ input[type=range]::-moz-range-thumb { width: 20px; height: 20px; border-radius: 
     <h1>Marktanteile &amp; Kundenzahlen 2020–2026</h1>
     <p>Zeitreihen zu den Nutzerzahlen der in der Schweiz aktiven Neobanken. Werte zwischen Datenpunkten linear interpoliert; Prognosen ab Jan 2026 sind IFZ-Schätzungen. Quelle: Angaben der Neobanken, Medienberichte &amp; Swiss Payment Monitor (SPM) HSG/ZHAW.</p>
   </div>
-  <div class="highlights-header">
-    <h2>Highlights</h2>
-  </div>
-  <div class="kpi-row">
-    <div class="kpi"><div class="kpi-label">Grösste Neobank 2025</div><div class="kpi-value"><span class="kpi-accent">Revolut</span></div><div class="kpi-sub">~1,16 Mio. Nutzer:innen</div></div>
-    <div class="kpi"><div class="kpi-label">Gesamtmarkt Ende 2025</div><div class="kpi-value">~2,2 Mio.</div><div class="kpi-sub">Alle Neobanken CH</div></div>
-    <div class="kpi"><div class="kpi-label">Yuh Wachstum 2021–25</div><div class="kpi-value">+<span class="kpi-accent">399k</span></div><div class="kpi-sub">Stärkstes CH-Wachstum</div></div>
-    <div class="kpi"><div class="kpi-label">Marktaustritt 2025</div><div class="kpi-value">3 Banken</div><div class="kpi-sub">Radicant, Kaspar&amp;, Yapeal</div></div>
-  </div>
+  <details class="highlights" open>
+    <summary class="highlights-toggle"><h2>Highlights</h2><span class="toggle-icon"></span></summary>
+    <div class="kpi-row">
+      <div class="kpi"><div class="kpi-label">Grösste Neobank 2025</div><div class="kpi-value"><span class="kpi-accent">Revolut</span></div><div class="kpi-sub">~1,16 Mio. Nutzer:innen</div></div>
+      <div class="kpi"><div class="kpi-label">Gesamtmarkt Ende 2025</div><div class="kpi-value">~2,2 Mio.</div><div class="kpi-sub">Alle Neobanken CH</div></div>
+      <div class="kpi"><div class="kpi-label">Yuh Wachstum 2021–25</div><div class="kpi-value">+<span class="kpi-accent">399k</span></div><div class="kpi-sub">Stärkstes CH-Wachstum</div></div>
+      <div class="kpi"><div class="kpi-label">Marktaustritt 2025</div><div class="kpi-value">3 Banken</div><div class="kpi-sub">Radicant, Kaspar&amp;, Yapeal</div></div>
+    </div>
+  </details>
   <div class="tabs-bar" id="tabsBar">
     <button class="tab-btn active" data-tab="zeitverlauf">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -269,10 +274,10 @@ input[type=range]::-moz-range-thumb { width: 20px; height: 20px; border-radius: 
   <div class="panel" id="tab-ereignisse">
     <div class="controls">
       <div class="control-group">
-        <div class="control-label">Zeitraum bis ← ziehen</div>
+        <div class="control-label">Zeitraum ab ← ziehen</div>
         <div class="slider-wrap">
-          <input type="range" id="sliderEreignisse" min="2020" max="2026" value="2026" step="1">
-          <span class="slider-val" id="valEreignisse">2026</span>
+          <input type="range" id="sliderEreignisse" min="2020" max="2026" value="2020" step="1">
+          <span class="slider-val" id="valEreignisse">2020</span>
         </div>
       </div>
     </div>
@@ -627,10 +632,10 @@ function drawBar(containerId, endYear){
 
 /* ═══ TIMELINE ═══ */
 function renderTimeline(){
-  var max=parseInt(document.getElementById('sliderEreignisse').value);
-  document.getElementById('valEreignisse').textContent=max;
+  var min=parseInt(document.getElementById('sliderEreignisse').value);
+  document.getElementById('valEreignisse').textContent=min;
   var byY={};
-  EVENTS.filter(function(ev){ return ev.year<=max; }).forEach(function(ev){
+  EVENTS.filter(function(ev){ return ev.year>=min; }).forEach(function(ev){
     if(!byY[ev.year]) byY[ev.year]=[];
     byY[ev.year].push(ev);
   });
