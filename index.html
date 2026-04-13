@@ -75,6 +75,11 @@ body {
 .tabs-label { font-size: 11px; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); font-weight: 500; padding: 12px 24px 0; }
 .tabs-bar { display: flex; padding: 8px 16px 12px; gap: 8px; border-bottom: none; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; touch-action: pan-x; background: var(--soft); }
 .tabs-bar::-webkit-scrollbar { display: none; }
+.sticky-controls { padding: 0 24px 12px; background: var(--soft); }
+.sticky-controls .controls { margin-bottom: 0; }
+.sticky-controls .control-group { flex: 1 1 100%; }
+.sticky-ctrl { display: none; }
+.sticky-ctrl.active { display: block; }
 .tab-btn { font-family: 'Inter', system-ui, sans-serif; font-size: 13px; font-weight: 600; padding: 10px 18px; background: var(--bg); border: 1.5px solid var(--border); border-radius: 8px; cursor: pointer; color: var(--muted); white-space: nowrap; min-height: 42px; display: flex; align-items: center; gap: 8px; -webkit-tap-highlight-color: transparent; flex-shrink: 0; transition: all 0.25s ease; position: relative; }
 .tab-btn svg { width: 16px; height: 16px; flex-shrink: 0; transition: all 0.25s ease; }
 .tab-btn.active { color: #fff; background: var(--accent); border-color: var(--accent); box-shadow: 0 2px 12px rgba(62, 90, 138, 0.3); }
@@ -163,6 +168,7 @@ input[type=range]::-moz-range-thumb { width: 20px; height: 20px; border-radius: 
   .panel { padding: 12px; }
   .tabs-bar { padding: 6px 12px 10px; gap: 6px; }
   .tabs-label { padding: 8px 16px 0; font-size: 10px; }
+  .sticky-controls { padding: 0 12px 10px; }
   .tab-btn { font-size: 11px; padding: 8px 10px; flex: 1; justify-content: center; flex-direction: column; gap: 4px; min-height: 44px; }
   .tab-btn svg { width: 18px; height: 18px; }
   .footer-bar { padding: 16px; }
@@ -226,24 +232,61 @@ input[type=range]::-moz-range-thumb { width: 20px; height: 20px; border-radius: 
       Ereignisse
     </button>
   </div>
+  <div class="sticky-controls">
+    <div class="sticky-ctrl active" data-ctrl="zeitverlauf">
+      <div class="controls">
+        <div class="control-group">
+          <div class="control-label">Zeitraum wählen ← ziehen</div>
+          <div class="dual-slider">
+            <span class="slider-val" id="valZeitStart">2020</span>
+            <div class="dual-slider-track">
+              <input type="range" id="sliderZeitStart" min="2020" max="2026" value="2020" step="1">
+              <input type="range" id="sliderZeitEnd" min="2020" max="2026" value="2026" step="1">
+              <div class="dual-slider-fill" id="dualSliderFill"></div>
+            </div>
+            <span class="slider-val" id="valZeitEnd">2026</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="sticky-ctrl" data-ctrl="marktanteile">
+      <div class="controls">
+        <div class="control-group">
+          <div class="control-label">Referenzjahr ← ziehen</div>
+          <div class="slider-wrap">
+            <input type="range" id="sliderMarkt" min="2021" max="2026" value="2025" step="1">
+            <span class="slider-val" id="valMarkt">2025</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="sticky-ctrl" data-ctrl="wachstum">
+      <div class="controls">
+        <div class="control-group">
+          <div class="control-label">Bis Jahr ← ziehen</div>
+          <div class="slider-wrap">
+            <input type="range" id="sliderWachstum" min="2022" max="2026" value="2025" step="1">
+            <span class="slider-val" id="valWachstum">2025</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="sticky-ctrl" data-ctrl="ereignisse">
+      <div class="controls">
+        <div class="control-group">
+          <div class="control-label">Zeitraum ab ← ziehen</div>
+          <div class="slider-wrap">
+            <input type="range" id="sliderEreignisse" min="2020" max="2026" value="2020" step="1">
+            <span class="slider-val" id="valEreignisse">2020</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   </div>
 
   <!-- TAB 1 -->
   <div class="panel active" id="tab-zeitverlauf">
-    <div class="controls">
-      <div class="control-group" style="flex:1 1 100%">
-        <div class="control-label">Zeitraum wählen ← ziehen</div>
-        <div class="dual-slider">
-          <span class="slider-val" id="valZeitStart">2020</span>
-          <div class="dual-slider-track">
-            <input type="range" id="sliderZeitStart" min="2020" max="2026" value="2020" step="1">
-            <input type="range" id="sliderZeitEnd" min="2020" max="2026" value="2026" step="1">
-            <div class="dual-slider-fill" id="dualSliderFill"></div>
-          </div>
-          <span class="slider-val" id="valZeitEnd">2026</span>
-        </div>
-      </div>
-    </div>
     <div class="legend" id="legendZeit"></div>
     <div class="chart-wrap" id="wrapZeit"></div>
     <div class="notice">✱ Gestrichelte Linie = IFZ-Prognose ab Jan 2026. Revolut zählt alle KYC-verifizierten Nutzer:innen. Wise &amp; N26 sind SPM-Schätzungen.</div>
@@ -251,15 +294,6 @@ input[type=range]::-moz-range-thumb { width: 20px; height: 20px; border-radius: 
 
   <!-- TAB 2 -->
   <div class="panel" id="tab-marktanteile">
-    <div class="controls">
-      <div class="control-group">
-        <div class="control-label">Referenzjahr ← ziehen</div>
-        <div class="slider-wrap">
-          <input type="range" id="sliderMarkt" min="2021" max="2026" value="2025" step="1">
-          <span class="slider-val" id="valMarkt">2025</span>
-        </div>
-      </div>
-    </div>
     <div class="legend" id="legendMarkt"></div>
     <div class="chart-wrap" id="wrapMarkt"></div>
     <div class="notice">Marktanteile per Dezember des gewählten Jahres. 2026 = Prognose.</div>
@@ -267,15 +301,6 @@ input[type=range]::-moz-range-thumb { width: 20px; height: 20px; border-radius: 
 
   <!-- TAB 3 -->
   <div class="panel" id="tab-wachstum">
-    <div class="controls">
-      <div class="control-group">
-        <div class="control-label">Bis Jahr ← ziehen</div>
-        <div class="slider-wrap">
-          <input type="range" id="sliderWachstum" min="2022" max="2026" value="2025" step="1">
-          <span class="slider-val" id="valWachstum">2025</span>
-        </div>
-      </div>
-    </div>
     <div class="legend" id="legendWachstum"></div>
     <div class="chart-wrap" id="wrapWachstum"></div>
     <div class="notice">Jährliches Wachstum = Differenz Dez. vs. Dez. Vorjahr.</div>
@@ -283,15 +308,6 @@ input[type=range]::-moz-range-thumb { width: 20px; height: 20px; border-radius: 
 
   <!-- TAB 4 -->
   <div class="panel" id="tab-ereignisse">
-    <div class="controls">
-      <div class="control-group">
-        <div class="control-label">Zeitraum ab ← ziehen</div>
-        <div class="slider-wrap">
-          <input type="range" id="sliderEreignisse" min="2020" max="2026" value="2020" step="1">
-          <span class="slider-val" id="valEreignisse">2020</span>
-        </div>
-      </div>
-    </div>
     <div id="timelineContainer"></div>
   </div>
 
@@ -741,6 +757,9 @@ tabsBar.addEventListener('click',function(e){
   if(!btn||!btn.dataset.tab) return;
   var tab=btn.dataset.tab;
   document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
+  document.querySelectorAll('.sticky-ctrl').forEach(function(c){ c.classList.remove('active'); });
+  var ctrl=document.querySelector('.sticky-ctrl[data-ctrl="'+tab+'"]');
+  if(ctrl) ctrl.classList.add('active');
   document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('active'); });
   btn.classList.add('active');
   document.getElementById('tab-'+tab).classList.add('active');
